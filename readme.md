@@ -1,11 +1,7 @@
-### Description
+#### Description
 
-Arch Linux script that downloads a pacman ranked mirrorlist.
+Script that downloads a ranked mirrorlist from the [Arch Linux Mirrorlist Generator](https://www.archlinux.org/mirrorlist/).
 
-### Usage
+#### Usage
 
-Enter `-h, --help` to see usage and available country codes; the country code may also be entered in the script itself.
-
-```bash
-armrr [*country code] - download pacman ranked mirrorlist
-```
+    armrr [*country code] [*-h|--help] — download a pacman ranked mirrorlist
