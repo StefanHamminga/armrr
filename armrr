@@ -1,6 +1,13 @@
 #!/usr/bin/bash
 # Download pacman ranked mirrorlist
 
+if [ "$1" = "-y" ]; then
+  shift
+  SILENT=y
+else
+  SILENT=n
+fi
+
 countries=(AT AU BE BG BR BY CA CH CL CN CO CZ DE DK EE ES FI FR GB GR HU IE IL IN IT JP KR KZ LK LU LV MK NC NL NO NZ PL PT RO RS RU SE SG SK TR TW UA US UZ VN ZA)
 country=""
 [ "$1" ] && country="$1"
@@ -44,6 +51,20 @@ fi
 # Edit
 sed -i 's/^#Server/Server/g' "$tmp_ml"
 
+# Backup
+bck_ml () {
+if [ -f /etc/pacman.d/mirrorlist ]; then
+  mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist_$(date +%Y%m%d%H%M)
+else
+  echo "Warning: no /etc/pacman.d/mirrorlist"
+fi ; }
+
+if [ "$SILENT" = "y" ]; then
+  bck_ml
+  install -Dm644 "$tmp_ml" /etc/pacman.d/mirrorlist
+  exit $?
+fi
+
 # View
 while true; do
   read -p "View the downloaded mirrorlist? (y/n): " yn
@@ -59,14 +80,6 @@ while true; do
     [*]  )  true
   esac
 done
-
-# Backup
-bck_ml () {
-if [ -f /etc/pacman.d/mirrorlist ]; then
-  mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist_$(date +%Y%m%d%H%M)
-else
-  echo "Warning: no /etc/pacman.d/mirrorlist"
-fi ; }
 
 # Install
 while true; do
